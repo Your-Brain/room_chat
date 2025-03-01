@@ -74,9 +74,52 @@
         padding: 8px;
         border-bottom: 1px solid #4a5568;
       }
+
+      /* Server message: center */
+      .server-message {
+        text-align: center;
+        color: gray;
+        font-style: italic;
+        background: #f1f1f1;
+        padding: 8px;
+        border-radius: 5px;
+        width: auto;
+        align-self: center;
+      }
+
+      /* User's own messages: right */
+      .user-message.self {
+        text-align: right;
+        background: #007bff;
+        color: white;
+        padding: 8px;
+        border-radius: 5px;
+        width: auto;
+        align-self: flex-end;
+      }
+
+      /* Other users' messages: left */
+      .user-message.other {
+        text-align: left;
+        background: #891df677;
+        color: rgb(255, 242, 242);
+        padding: 8px;
+        border-radius: 5px;
+        width: auto;
+        align-self: flex-start;
+      }
+      /* Add this to your CSS file */
+      .no-scrollbar::-webkit-scrollbar {
+        display: none; /* Hide scrollbar for Chrome, Safari */
+      }
+
+      .no-scrollbar {
+        -ms-overflow-style: none; /* Hide scrollbar for IE, Edge */
+        scrollbar-width: none; /* Hide scrollbar for Firefox */
+      }
     </style>
   </head>
-  <body class="dark">
+  <body class="dark overflow-x-hidden no-scrollbar">
     <div id="joinForm" class="flex justify-center items-center h-screen">
       <div class="card p-6 bg-gray-800 rounded-lg shadow-lg text-center">
         <h2 class="text-2xl font-bold mb-4">Join Chat Room</h2>
@@ -84,14 +127,14 @@
           type="text"
           id="username"
           placeholder="Enter your name"
-          class="input mb-3 w-full px-4 py-3 text-black rounded-md outline-none focus:outline-none focus:ring-2 focus:ring-blue-500 bg-zinc-600"
+          class="input mb-3 w-full px-4 py-3 text-white rounded-md outline-none focus:outline-none focus:ring-2 focus:ring-blue-500 bg-zinc-600"
           required
         />
         <input
           type="text"
           id="room"
           placeholder="Enter room name"
-          class="input mb-3 w-full px-4 py-3 text-black rounded-md outline-none focus:outline-none focus:ring-2 focus:ring-blue-500 bg-zinc-600"
+          class="input mb-3 w-full px-4 py-3 text-white rounded-md outline-none focus:outline-none focus:ring-2 focus:ring-blue-500 bg-zinc-600"
           required
         />
         <button
@@ -103,21 +146,34 @@
       </div>
     </div>
 
-    <div id="chat" class="hidden app-container">
-      <div class="sidebar w-screen flex flex-col items-center justify-center">
-        <h3 class="text-[40px] font-bold mb-2">Users</h3>
-        <ul id="users" class="user-list text-sm text-gray-300"></ul>
+    <div id="chat" class="hidden app-container overflow-auto no-scrollbar">
+      <div
+        class="sidebar w-screen flex flex-col items-center justify-center no-scrollbar"
+      >
+        <h3 class="text-[40px] font-bold mb-2 underline capitalize bold">
+          Users
+        </h3>
+        <ul
+          id="users"
+          class="user-list text-md text-blue-300 flex flex-wrap gap-2 px-8 uppercase"
+        ></ul>
       </div>
       <div class="chat-area">
-        <div id="messages" class="message-box flex flex-col items-center justify-center  text-xl gap-3"></div>
-        <div class="input-area">
+        <div
+          id="messages"
+          class="message-box flex flex-col items-center justify-center text-xl gap-3 overflow-auto no-scrollbar px-5"
+        ></div>
+        <div class="input-area flex flex-wrap gap-3">
           <input
             type="text"
             id="messageInput"
             placeholder="Type a message..."
-            class="input px-4 py-3 mt-4 text-white text-xl rounded-md"
+            class="input px-4 py-3 mt-4 text-white text-xl rounded-md sm:w-auto w-full outline-none focus:outline-none focus:ring-2 focus:ring-blue-500 bg-zinc-600"
           />
-          <button onclick="sendMessage()" class="send-button text-white mt-4">
+          <button
+            onclick="sendMessage()"
+            class="send-button text-white mt-4 w-full sm:w-auto"
+          >
             Send
           </button>
         </div>
@@ -135,8 +191,6 @@
           }
         });
       });
-
-      
     </script>
   </body>
 </html>

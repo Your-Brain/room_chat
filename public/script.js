@@ -1,4 +1,3 @@
-
 const socket = io();
 let username = "";
 let room = "";
@@ -13,6 +12,7 @@ function joinChat() {
   }
 }
 
+// Update user list
 socket.on("userList", (users) => {
   const userList = document.getElementById("users");
   userList.innerHTML = users
@@ -20,16 +20,41 @@ socket.on("userList", (users) => {
     .join("");
 });
 
+// Display messages correctly
 socket.on("message", (data) => {
   const messages = document.getElementById("messages");
-  messages.innerHTML += `<p><strong>${data.username}:</strong> ${data.message}</p>`;
+  const messageElement = document.createElement("div");
+
+  // Add username and message content
+  messageElement.innerHTML = `<p><strong>${data.username}:</strong> ${data.message}</p>`;
+
+  if (data.username === "Server") {
+    messageElement.classList.add("server-message");
+  } else if (data.username === username) {
+    messageElement.classList.add("user-message", "self"); // Current user's messages
+  } else {
+    messageElement.classList.add("user-message", "other"); // Other users' messages
+  }
+
+  messages.appendChild(messageElement);
+  messageElement.scrollIntoView({ behavior: "smooth" });
 });
 
+// Send message function
 function sendMessage() {
   const messageInput = document.getElementById("messageInput");
   const message = messageInput.value.trim();
   if (message) {
-    socket.emit("message", { message });
+    socket.emit("message", { username, message }); // Ensure username is sent
     messageInput.value = "";
   }
 }
+
+// Send message on Enter key
+document
+  .getElementById("messageInput")
+  .addEventListener("keypress", (event) => {
+    if (event.key === "Enter") {
+      sendMessage();
+    }
+  });
