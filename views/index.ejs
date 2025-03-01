@@ -13,6 +13,14 @@
       };
     </script>
     <style>
+      * {
+        user-select: none; /* Standard */
+        -webkit-user-select: none; /* Safari */
+        -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Edge */
+        -webkit-touch-callout: none; /* iOS Safari */
+      }
+
       .dark {
         background-color: #1a202c;
         color: #ffffff;
@@ -181,16 +189,86 @@
     </div>
 
     <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        document.body.classList.add("dark");
-        const messageInput = document.getElementById("messageInput");
-        messageInput.addEventListener("keypress", function (event) {
-          if (event.key === "Enter") {
+            document.addEventListener("DOMContentLoaded", function () {
+              document.body.classList.add("dark");
+              const messageInput = document.getElementById("messageInput");
+              messageInput.addEventListener("keypress", function (event) {
+                if (event.key === "Enter") {
+                  event.preventDefault();
+                  sendMessage();
+                }
+              });
+            });
+            <!--  -->
+            document.addEventListener("keydown", function (event) {
+        // Block screenshot shortcuts
+        if (
+          event.key === "PrintScreen" ||
+          (event.ctrlKey && event.key === "p") ||
+          (event.metaKey && event.key === "p")
+        ) {
+          event.preventDefault();
+          alert("Screenshots are disabled!");
+        }
+      });
+
+      // Detect when user tries to switch apps (Android/iOS)
+      document.addEventListener("visibilitychange", function () {
+        if (document.hidden) {
+          document.body.style.display = "none"; // Hide content
+          setTimeout(() => {
+            document.body.style.display = "block";
+          }, 1000); // Restore after 1s
+        }
+      });
+
+      // Prevent right-click (optional)
+      document.addEventListener("contextmenu", function (event) {
+        event.preventDefault();
+      });
+
+      // Prevent copying content
+      document.addEventListener("copy", function (event) {
+        event.preventDefault();
+        alert("Copying is disabled!");
+      });
+
+      // For Android & iOS (blocks screen recording)
+      if (navigator.userAgent.match(/Android|iPhone|iPad|iPod/i)) {
+        setInterval(() => {
+          const testCanvas = document.createElement("canvas");
+          testCanvas.width = window.innerWidth;
+          testCanvas.height = window.innerHeight;
+          const ctx = testCanvas.getContext("2d");
+          ctx.fillText("Preventing screen capture", 50, 50);
+
+          if (testCanvas.toDataURL() !== "data:," && document.hasFocus()) {
+            alert("Screen capture detected! This is not allowed.");
+            document.body.style.display = "none"; // Hide content
+          }
+        }, 2000); // Check every 2 seconds
+      }
+      (function () {
+        // Prevent right-click (Context Menu)
+        document.addEventListener("contextmenu", function (event) {
+          event.preventDefault();
+        });
+
+        // Prevent F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C, Ctrl+U
+        document.addEventListener("keydown", function (event) {
+          if (
+            event.key === "F12" ||
+            (event.ctrlKey && event.shiftKey && event.key === "I") ||
+            (event.ctrlKey && event.shiftKey && event.key === "J") ||
+            (event.ctrlKey && event.shiftKey && event.key === "C") ||
+            (event.ctrlKey && event.key === "U")
+          ) {
             event.preventDefault();
-            sendMessage();
           }
         });
-      });
+
+
+      })();
     </script>
   </body>
 </html>
