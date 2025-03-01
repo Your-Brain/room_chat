@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chat App</title>
+    <script defer src="/socket.io/socket.io.js"></script>
+    <script defer src="/script.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+      };
+    </script>
+    <style>
+      .dark {
+        background-color: #1a202c;
+        color: #ffffff;
+      }
+      .app-container {
+        display: flex;
+        height: 100vh;
+      }
+      .sidebar {
+        width: 300px;
+        background-color: #2d3748;
+        padding: 20px;
+        overflow-y: auto;
+      }
+      .chat-area {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 20px;
+      }
+      .message-box {
+        flex-grow: 1;
+        overflow-y: auto;
+        padding: 10px;
+        background-color: #4a5568;
+        border-radius: 10px;
+        max-height: 70vh;
+      }
+      .input-area {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+      }
+      .input-area input {
+        flex-grow: 1;
+        padding: 12px;
+        border-radius: 5px;
+        background-color: #2d3748;
+        border: 1px solid #718096;
+        color: rgb(255, 245, 245);
+        outline: none;
+      }
+      .send-button {
+        background-color: #38a169;
+        padding: 12px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+      .send-button:hover {
+        background-color: #2f855a;
+      }
+      .user-list {
+        list-style: none;
+        padding: 0;
+      }
+      .user-list li {
+        padding: 8px;
+        border-bottom: 1px solid #4a5568;
+      }
+    </style>
+  </head>
+  <body class="dark">
+    <div id="joinForm" class="flex justify-center items-center h-screen">
+      <div class="card p-6 bg-gray-800 rounded-lg shadow-lg text-center">
+        <h2 class="text-2xl font-bold mb-4">Join Chat Room</h2>
+        <input
+          type="text"
+          id="username"
+          placeholder="Enter your name"
+          class="input mb-3 w-full px-4 py-3 text-black rounded-md outline-none focus:outline-none focus:ring-2 focus:ring-blue-500 bg-zinc-600"
+          required
+        />
+        <input
+          type="text"
+          id="room"
+          placeholder="Enter room name"
+          class="input mb-3 w-full px-4 py-3 text-black rounded-md outline-none focus:outline-none focus:ring-2 focus:ring-blue-500 bg-zinc-600"
+          required
+        />
+        <button
+          onclick="joinChat()"
+          class="button bg-blue-500 text-white w-full p-3 rounded"
+        >
+          Join Room
+        </button>
+      </div>
+    </div>
+
+    <div id="chat" class="hidden app-container">
+      <div class="sidebar w-screen flex flex-col items-center justify-center">
+        <h3 class="text-[40px] font-bold mb-2">Users</h3>
+        <ul id="users" class="user-list text-sm text-gray-300"></ul>
+      </div>
+      <div class="chat-area">
+        <div id="messages" class="message-box flex flex-col items-center justify-center  text-xl gap-3"></div>
+        <div class="input-area">
+          <input
+            type="text"
+            id="messageInput"
+            placeholder="Type a message..."
+            class="input px-4 py-3 mt-4 text-white text-xl rounded-md"
+          />
+          <button onclick="sendMessage()" class="send-button text-white mt-4">
+            Send
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        document.body.classList.add("dark");
+        const messageInput = document.getElementById("messageInput");
+        messageInput.addEventListener("keypress", function (event) {
+          if (event.key === "Enter") {
+            event.preventDefault();
+            sendMessage();
+          }
+        });
+      });
+
+      
+    </script>
+  </body>
+</html>
