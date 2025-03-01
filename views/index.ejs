@@ -222,10 +222,7 @@
         }
       });
 
-      // Prevent right-click (optional)
-      document.addEventListener("contextmenu", function (event) {
-        event.preventDefault();
-      });
+     
 
       // Prevent copying content
       document.addEventListener("copy", function (event) {
@@ -234,20 +231,8 @@
       });
 
       // For Android & iOS (blocks screen recording)
-      if (navigator.userAgent.match(/Android|iPhone|iPad|iPod/i)) {
-        setInterval(() => {
-          const testCanvas = document.createElement("canvas");
-          testCanvas.width = window.innerWidth;
-          testCanvas.height = window.innerHeight;
-          const ctx = testCanvas.getContext("2d");
-          ctx.fillText("Preventing screen capture", 50, 50);
 
-          if (testCanvas.toDataURL() !== "data:," && document.hasFocus()) {
-            alert("Screen capture detected! This is not allowed.");
-            document.body.style.display = "none"; // Hide content
-          }
-        }, 2000); // Check every 2 seconds
-      }
+
       (function () {
         // Prevent right-click (Context Menu)
         document.addEventListener("contextmenu", function (event) {
