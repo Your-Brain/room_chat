@@ -307,13 +307,15 @@
               if (window.innerHeight < screenHeight) {
                 inputArea.style.position = "fixed";
                 inputArea.style.bottom = "10px";
-               
+               inputArea.style.background = "#2d3748ba";
                 inputArea.style.width = "90%";
                 inputArea.style.zIndex = "9999";
               } else {
                 inputArea.style.position = "relative";
                 inputArea.style.bottom = originalBottom;
                 inputArea.style.transform = "none";
+               inputArea.style.background = "transparent";
+
                 inputArea.style.width = "100%";
               }
             });
