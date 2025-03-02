@@ -137,6 +137,9 @@
         text-align: center;
         text-shadow: 2px 2px 4px rgba(59, 54, 54, 0.5);
       }
+      .bg-active {
+        background-color: #2d3748ba;
+      }
     </style>
   </head>
   <body class="dark overflow-x-hidden no-scrollbar h-100dvh">
@@ -293,33 +296,31 @@
       }
 
       function adjustInputPosition() {
-    const inputContainer = document.getElementById("inputContainer");
-    const originalBottom = "0px"; // Default position
-    const originalBg = "bg-transparent"; // Default background
-    const activeBg = "bg-zinc-800"; // Background when moved up
+        const inputContainer = document.getElementById("inputContainer");
+        const originalBottom = "0px";
+        const activeBg = "bg-active";
 
-    function onResize() {
-      const windowHeight = window.innerHeight;
-      const documentHeight = document.documentElement.clientHeight;
+        function onResize() {
+          const windowHeight = window.innerHeight;
+          const documentHeight = document.documentElement.clientHeight;
 
-      if (windowHeight < documentHeight) {
-        // Keyboard is open, move input up
-        inputContainer.style.position = "absolute";
-        inputContainer.style.bottom = windowHeight - documentHeight + "px";
-        inputContainer.classList.add(activeBg);
-      } else {
-        // Keyboard is closed, reset position
-        inputContainer.style.position = "fixed";
-        inputContainer.style.bottom = originalBottom;
-        inputContainer.classList.remove(activeBg);
-        inputContainer.classList.add(originalBg);
+          if (windowHeight < documentHeight) {
+            // Keyboard is open, move input up and change background
+            inputContainer.style.position = "absolute";
+            inputContainer.style.bottom = windowHeight - documentHeight + "px";
+            inputContainer.classList.add(activeBg);
+          } else {
+            // Keyboard is closed, reset position and background
+            inputContainer.style.position = "fixed";
+            inputContainer.style.bottom = originalBottom;
+            inputContainer.classList.remove(activeBg);
+          }
+        }
+
+        window.addEventListener("resize", onResize);
       }
-    }
 
-    window.addEventListener("resize", onResize);
-  }
-
-  adjustInputPosition();
+      adjustInputPosition();
     </script>
   </body>
 </html>
