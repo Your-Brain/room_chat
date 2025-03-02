@@ -293,28 +293,33 @@
       }
 
       function adjustInputPosition() {
-        const inputContainer = document.getElementById("inputContainer");
-        const originalBottom = "0px"; // Default position when keyboard is hidden
+    const inputContainer = document.getElementById("inputContainer");
+    const originalBottom = "0px"; // Default position
+    const originalBg = "bg-transparent"; // Default background
+    const activeBg = "bg-zinc-800"; // Background when moved up
 
-        function onResize() {
-          const windowHeight = window.innerHeight;
-          const documentHeight = document.documentElement.clientHeight;
+    function onResize() {
+      const windowHeight = window.innerHeight;
+      const documentHeight = document.documentElement.clientHeight;
 
-          if (windowHeight < documentHeight) {
-            // Keyboard is open, move input area up
-            inputContainer.style.position = "absolute";
-            inputContainer.style.bottom = windowHeight - documentHeight + "px";
-          } else {
-            // Keyboard is closed, reset position
-            inputContainer.style.position = "fixed";
-            inputContainer.style.bottom = originalBottom;
-          }
-        }
-
-        window.addEventListener("resize", onResize);
+      if (windowHeight < documentHeight) {
+        // Keyboard is open, move input up
+        inputContainer.style.position = "absolute";
+        inputContainer.style.bottom = windowHeight - documentHeight + "px";
+        inputContainer.classList.add(activeBg);
+      } else {
+        // Keyboard is closed, reset position
+        inputContainer.style.position = "fixed";
+        inputContainer.style.bottom = originalBottom;
+        inputContainer.classList.remove(activeBg);
+        inputContainer.classList.add(originalBg);
       }
+    }
 
-      adjustInputPosition();
+    window.addEventListener("resize", onResize);
+  }
+
+  adjustInputPosition();
     </script>
   </body>
 </html>
