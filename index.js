@@ -16,10 +16,8 @@ require("dotenv").config();
 let users = {};
 
 io.on("connection", (socket) => {
-  console.log("New user connected");
-
-  socket.on("joinRoom", ({ username, room }) => {
-    if (!username || !room) return;
+  socket.on("joinRoom", ({ username, room, password }) => {
+    if (!username || !room || !password) return;
 
     socket.join(room);
     users[socket.id] = { username, room };
@@ -31,12 +29,10 @@ io.on("connection", (socket) => {
     });
 
     // Notify others in the room
-    socket
-      .to(room)
-      .emit("message", {
-        username: "Server",
-        message: `${username} has joined the room`,
-      });
+    socket.to(room).emit("message", {
+      username: "Server",
+      message: `${username} has joined the room`,
+    });
 
     // Send updated user list in the room
     io.to(room).emit(
@@ -58,12 +54,10 @@ io.on("connection", (socket) => {
   socket.on("disconnect", () => {
     const user = users[socket.id];
     if (user) {
-      socket
-        .to(user.room)
-        .emit("message", {
-          username: "Server",
-          message: `${user.username} has left the room`,
-        });
+      socket.to(user.room).emit("message", {
+        username: "Server",
+        message: `${user.username} has left the room`,
+      });
       delete users[socket.id];
 
       // Update user list

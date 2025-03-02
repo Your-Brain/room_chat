@@ -1,14 +1,16 @@
 const socket = io();
 let username = "";
 let room = "";
+let password = "";
 
 function joinChat() {
   username = document.getElementById("username").value.trim();
   room = document.getElementById("room").value.trim();
-  if (username && room) {
+  password = document.getElementById("password").value.trim();
+  if (username && room && password) {
     document.getElementById("chat").style.display = "block";
     document.getElementById("joinForm").style.display = "none";
-    socket.emit("joinRoom", { username, room });
+    socket.emit("joinRoom", { username, room, password });
   }
 }
 
@@ -26,7 +28,7 @@ socket.on("message", (data) => {
   const messageElement = document.createElement("div");
 
   // Add username and message content
-  messageElement.innerHTML = `<p><strong>${data.username}:</strong> ${data.message}</p>`;
+  messageElement.innerHTML = `<p><strong class="username">${data.username}:</strong> ${data.message}</p>`;
 
   if (data.username === "Server") {
     messageElement.classList.add("server-message");

@@ -23,7 +23,7 @@
 
       .dark {
         background-color: #1a202c;
-        color: #ffffff;
+        color: #ffffffcc;
       }
       .app-container {
         display: flex;
@@ -31,24 +31,23 @@
       }
       .sidebar {
         width: 300px;
-        background-color: #2d3748;
+        background-color: #2d3748ba;
         padding: 20px;
-        overflow-y: auto;
       }
       .chat-area {
         flex-grow: 1;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        padding: 20px;
+        padding: 10px;
       }
       .message-box {
         flex-grow: 1;
         overflow-y: auto;
         padding: 10px;
-        background-color: #4a5568;
+        background-color: #4a5568c7;
         border-radius: 10px;
-        max-height: 70vh;
+        height: 70vh;
       }
       .input-area {
         display: flex;
@@ -72,23 +71,26 @@
         transition: background-color 0.3s;
       }
       .send-button:hover {
-        background-color: #2f855a;
+        background-color: #256b48;
       }
       .user-list {
         list-style: none;
         padding: 0;
       }
       .user-list li {
+        text-transform: capitalize;
         padding: 8px;
-        border-bottom: 1px solid #4a5568;
+        border: 1px solid #33ff0034;
+        border-radius: 5px;
+        background-color: #eeeeee30;
       }
 
       /* Server message: center */
       .server-message {
         text-align: center;
-        color: gray;
+        color: rgba(128, 128, 128, 0.505);
         font-style: italic;
-        background: #f1f1f1;
+        background: #00000064;
         padding: 8px;
         border-radius: 5px;
         width: auto;
@@ -98,7 +100,7 @@
       /* User's own messages: right */
       .user-message.self {
         text-align: right;
-        background: #007bff;
+        background: #007bffb3;
         color: white;
         padding: 8px;
         border-radius: 5px;
@@ -109,7 +111,7 @@
       /* Other users' messages: left */
       .user-message.other {
         text-align: left;
-        background: #891df677;
+        background: #b570f98f;
         color: rgb(255, 242, 242);
         padding: 8px;
         border-radius: 5px;
@@ -124,6 +126,12 @@
       .no-scrollbar {
         -ms-overflow-style: none; /* Hide scrollbar for IE, Edge */
         scrollbar-width: none; /* Hide scrollbar for Firefox */
+      }
+      .username {
+        color: #1cef1ca1;
+        text-transform: uppercase;
+        text-align: center;
+        text-shadow: 2px 2px 4px rgba(59, 54, 54, 0.5);
       }
     </style>
   </head>
@@ -145,6 +153,22 @@
           class="input mb-3 w-full px-4 py-3 text-white rounded-md outline-none focus:outline-none focus:ring-2 focus:ring-blue-500 bg-zinc-600"
           required
         />
+        <div class="w-full flex items-center gap-2 relative">
+          <input
+            type="password"
+            id="password"
+            placeholder="Enter room password"
+            class="input mb-3 w-full px-4 py-3 text-white rounded-md outline-none focus:ring-2 focus:ring-blue-500 bg-zinc-600"
+            required
+          />
+          <button
+            onclick="togglePassword()"
+            class="absolute right-3 top-1/2 transform -translate-y-1/2"
+          >
+            <i id="eyeIcon">👁️</i>
+          </button>
+        </div>
+
         <button
           onclick="joinChat()"
           class="button bg-blue-500 text-white w-full p-3 rounded"
@@ -222,7 +246,7 @@
         }
       });
 
-     
+
 
       // Prevent copying content
       document.addEventListener("copy", function (event) {
@@ -254,6 +278,17 @@
 
 
       })();
+       function togglePassword() {
+        const passwordField = document.getElementById("password");
+        const eyeIcon = document.getElementById("eyeIcon");
+        if (passwordField.type === "password") {
+          passwordField.type = "text";
+          eyeIcon.textContent = "🙈"; // Closed eye icon
+        } else {
+          passwordField.type = "password";
+          eyeIcon.textContent = "👁️"; // Open eye icon
+        }
+      }
     </script>
   </body>
 </html>
