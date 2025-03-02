@@ -137,9 +137,6 @@
         text-align: center;
         text-shadow: 2px 2px 4px rgba(59, 54, 54, 0.5);
       }
-      .bg-active {
-        background-color: #2d3748ba;
-      }
     </style>
   </head>
   <body class="dark overflow-x-hidden no-scrollbar h-100dvh">
@@ -202,10 +199,7 @@
           id="messages"
           class="message-box flex flex-col text-xl gap-3 overflow-auto no-scrollbar px-5"
         ></div>
-        <div
-          id="inputContainer"
-          class="flex flex-wrap gap-3 sm:fixed sm:bottom-0 input-area transition-all duration-300"
-        >
+        <div class="input-area flex flex-wrap gap-3">
           <input
             type="text"
             id="messageInput"
@@ -223,104 +217,112 @@
     </div>
 
     <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        document.body.classList.add("dark");
+                  document.addEventListener("DOMContentLoaded", function () {
+                    document.body.classList.add("dark");
+                    const messageInput = document.getElementById("messageInput");
+                    messageInput.addEventListener("keypress", function (event) {
+                      if (event.key === "Enter") {
+                        event.preventDefault();
+                        sendMessage();
+                      }
+                    });
+                  });
+                  <!--  -->
+                  document.addEventListener("keydown", function (event) {
+              // Block screenshot shortcuts
+              if (
+                event.key === "PrintScreen" ||
+                (event.ctrlKey && event.key === "p") ||
+                (event.metaKey && event.key === "p")
+              ) {
+                event.preventDefault();
+                alert("Screenshots are disabled!");
+              }
+            });
+
+            // Detect when user tries to switch apps (Android/iOS)
+            document.addEventListener("visibilitychange", function () {
+              if (document.hidden) {
+                document.body.style.display = "none"; // Hide content
+                setTimeout(() => {
+                  document.body.style.display = "block";
+                }, 1000); // Restore after 1s
+              }
+            });
+
+
+
+            // Prevent copying content
+            document.addEventListener("copy", function (event) {
+              event.preventDefault();
+              alert("Copying is disabled!");
+            });
+
+            // For Android & iOS (blocks screen recording)
+
+
+            (function () {
+              // Prevent right-click (Context Menu)
+              document.addEventListener("contextmenu", function (event) {
+                event.preventDefault();
+              });
+
+              // Prevent F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C, Ctrl+U
+              document.addEventListener("keydown", function (event) {
+                if (
+                  event.key === "F12" ||
+                  (event.ctrlKey && event.shiftKey && event.key === "I") ||
+                  (event.ctrlKey && event.shiftKey && event.key === "J") ||
+                  (event.ctrlKey && event.shiftKey && event.key === "C") ||
+                  (event.ctrlKey && event.key === "U")
+                ) {
+                  event.preventDefault();
+                }
+              });
+
+
+            })();
+             function togglePassword() {
+              const passwordField = document.getElementById("password");
+              const eyeIcon = document.getElementById("eyeIcon");
+              if (passwordField.type === "password") {
+                passwordField.type = "text";
+                eyeIcon.textContent = "🙈"; // Closed eye icon
+              } else {
+                passwordField.type = "password";
+                eyeIcon.textContent = "👁️"; // Open eye icon
+              }
+            }
+            
+            document.addEventListener("DOMContentLoaded", function () {
+        const inputArea = document.querySelector(".input-area");
         const messageInput = document.getElementById("messageInput");
-        messageInput.addEventListener("keypress", function (event) {
-          if (event.key === "Enter") {
-            event.preventDefault();
-            sendMessage();
-          }
-        });
-      });
 
-      document.addEventListener("keydown", function (event) {
-        // Block screenshot shortcuts
-        if (
-          event.key === "PrintScreen" ||
-          (event.ctrlKey && event.key === "p") ||
-          (event.metaKey && event.key === "p")
-        ) {
-          event.preventDefault();
-          alert("Screenshots are disabled!");
-        }
-      });
+        let originalBottom = inputArea.style.bottom; // Store default bottom position
 
-      // Detect when user tries to switch apps (Android/iOS)
-      document.addEventListener("visibilitychange", function () {
-        if (document.hidden) {
-          document.body.style.display = "none"; // Hide content
-          setTimeout(() => {
-            document.body.style.display = "block";
-          }, 1000); // Restore after 1s
-        }
-      });
-
-      // Prevent copying content
-      document.addEventListener("copy", function (event) {
-        event.preventDefault();
-        alert("Copying is disabled!");
-      });
-
-      // For Android & iOS (blocks screen recording)
-
-      (function () {
-        // Prevent right-click (Context Menu)
-        document.addEventListener("contextmenu", function (event) {
-          event.preventDefault();
-        });
-
-        // Prevent F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C, Ctrl+U
-        document.addEventListener("keydown", function (event) {
-          if (
-            event.key === "F12" ||
-            (event.ctrlKey && event.shiftKey && event.key === "I") ||
-            (event.ctrlKey && event.shiftKey && event.key === "J") ||
-            (event.ctrlKey && event.shiftKey && event.key === "C") ||
-            (event.ctrlKey && event.key === "U")
-          ) {
-            event.preventDefault();
-          }
-        });
-      })();
-      function togglePassword() {
-        const passwordField = document.getElementById("password");
-        const eyeIcon = document.getElementById("eyeIcon");
-        if (passwordField.type === "password") {
-          passwordField.type = "text";
-          eyeIcon.textContent = "🙈"; // Closed eye icon
-        } else {
-          passwordField.type = "password";
-          eyeIcon.textContent = "👁️"; // Open eye icon
-        }
-      }
-
-      function adjustInputPosition() {
-        const inputContainer = document.getElementById("inputContainer");
-        const originalBottom = "0px";
-        const activeBg = "bg-active";
-
-        function onResize() {
-          const windowHeight = window.innerHeight;
-          const documentHeight = document.documentElement.clientHeight;
-
-          if (windowHeight < documentHeight) {
-            // Keyboard is open, move input up and change background
-            inputContainer.style.position = "absolute";
-            inputContainer.style.bottom = windowHeight - documentHeight + "px";
-            inputContainer.classList.add(activeBg);
-          } else {
-            // Keyboard is closed, reset position and background
-            inputContainer.style.position = "fixed";
-            inputContainer.style.bottom = originalBottom;
-            inputContainer.classList.remove(activeBg);
+        function adjustForKeyboard() {
+          if (window.innerWidth < 768) { // Mobile only
+            const screenHeight = window.innerHeight;
+            window.addEventListener("resize", function () {
+              if (window.innerHeight < screenHeight) {
+                inputArea.style.position = "fixed";
+                inputArea.style.bottom = "10px";
+                inputArea.style.left = "50%";
+                inputArea.style.transform = "translateX(-50%)";
+                inputArea.style.width = "90%";
+                inputArea.style.zIndex = "9999";
+              } else {
+                inputArea.style.position = "relative";
+                inputArea.style.bottom = originalBottom;
+                inputArea.style.transform = "none";
+                inputArea.style.width = "100%";
+              }
+            });
           }
         }
 
-        window.addEventListener("resize", onResize);
-      }
-
-      adjustInputPosition();
+        adjustForKeyboard();
+      });
     </script>
   </body>
 </html>
