@@ -199,7 +199,10 @@
           id="messages"
           class="message-box flex flex-col text-xl gap-3 overflow-auto no-scrollbar px-5"
         ></div>
-        <div class="input-area flex flex-wrap gap-3 ">
+        <div
+          id="inputContainer"
+          class="flex flex-wrap gap-3 sm:fixed sm:bottom-0 input-area transition-all duration-300"
+        >
           <input
             type="text"
             id="messageInput"
@@ -217,18 +220,18 @@
     </div>
 
     <script>
-            document.addEventListener("DOMContentLoaded", function () {
-              document.body.classList.add("dark");
-              const messageInput = document.getElementById("messageInput");
-              messageInput.addEventListener("keypress", function (event) {
-                if (event.key === "Enter") {
-                  event.preventDefault();
-                  sendMessage();
-                }
-              });
-            });
-            <!--  -->
-            document.addEventListener("keydown", function (event) {
+      document.addEventListener("DOMContentLoaded", function () {
+        document.body.classList.add("dark");
+        const messageInput = document.getElementById("messageInput");
+        messageInput.addEventListener("keypress", function (event) {
+          if (event.key === "Enter") {
+            event.preventDefault();
+            sendMessage();
+          }
+        });
+      });
+
+      document.addEventListener("keydown", function (event) {
         // Block screenshot shortcuts
         if (
           event.key === "PrintScreen" ||
@@ -250,8 +253,6 @@
         }
       });
 
-
-
       // Prevent copying content
       document.addEventListener("copy", function (event) {
         event.preventDefault();
@@ -259,7 +260,6 @@
       });
 
       // For Android & iOS (blocks screen recording)
-
 
       (function () {
         // Prevent right-click (Context Menu)
@@ -279,10 +279,8 @@
             event.preventDefault();
           }
         });
-
-
       })();
-       function togglePassword() {
+      function togglePassword() {
         const passwordField = document.getElementById("password");
         const eyeIcon = document.getElementById("eyeIcon");
         if (passwordField.type === "password") {
@@ -293,6 +291,30 @@
           eyeIcon.textContent = "👁️"; // Open eye icon
         }
       }
+
+      function adjustInputPosition() {
+        const inputContainer = document.getElementById("inputContainer");
+        const originalBottom = "0px"; // Default position when keyboard is hidden
+
+        function onResize() {
+          const windowHeight = window.innerHeight;
+          const documentHeight = document.documentElement.clientHeight;
+
+          if (windowHeight < documentHeight) {
+            // Keyboard is open, move input area up
+            inputContainer.style.position = "absolute";
+            inputContainer.style.bottom = windowHeight - documentHeight + "px";
+          } else {
+            // Keyboard is closed, reset position
+            inputContainer.style.position = "fixed";
+            inputContainer.style.bottom = originalBottom;
+          }
+        }
+
+        window.addEventListener("resize", onResize);
+      }
+
+      adjustInputPosition();
     </script>
   </body>
 </html>
