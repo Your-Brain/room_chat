@@ -51,6 +51,7 @@
         background-color: #4a5568c7;
         border-radius: 10px;
         height: 70vh;
+        overflow-y: auto;
       }
       .input-area {
         display: flex;
@@ -138,7 +139,7 @@
       }
     </style>
   </head>
-  <body class="dark overflow-x-hidden no-scrollbar">
+  <body class="dark overflow-x-hidden no-scrollbar h-100dvh">
     <div id="joinForm" class="flex justify-center items-center h-screen">
       <div class="card p-6 bg-gray-800 rounded-lg shadow-lg text-center">
         <h2 class="text-2xl font-bold mb-4">Join Chat Room</h2>
@@ -183,10 +184,10 @@
 
     <div id="chat" class="hidden app-container overflow-auto no-scrollbar">
       <div
-        class="sidebar w-screen flex flex-col items-center justify-center no-scrollbar"
+        class="sidebar w-screen flex flex-col items-center justify-center no-scrollbar rounded-b-md border-b-2 border-zinc-400/50"
       >
         <h3 class="text-[40px] font-bold mb-2 underline capitalize bold">
-          Users
+          Users:
         </h3>
         <ul
           id="users"
@@ -196,9 +197,9 @@
       <div class="chat-area">
         <div
           id="messages"
-          class="message-box flex flex-col items-center justify-center text-xl gap-3 overflow-auto no-scrollbar px-5"
+          class="message-box flex flex-col text-xl gap-3 overflow-auto no-scrollbar px-5"
         ></div>
-        <div class="input-area flex flex-wrap gap-3">
+        <div class="input-area flex flex-wrap gap-3 ">
           <input
             type="text"
             id="messageInput"
