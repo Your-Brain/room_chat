@@ -217,104 +217,100 @@
     </div>
 
     <script>
-                  document.addEventListener("DOMContentLoaded", function () {
-                    document.body.classList.add("dark");
-                    const messageInput = document.getElementById("messageInput");
-                    messageInput.addEventListener("keypress", function (event) {
-                      if (event.key === "Enter") {
-                        event.preventDefault();
-                        sendMessage();
-                      }
-                    });
-                  });
-                  <!--  -->
-                  document.addEventListener("keydown", function (event) {
-              // Block screenshot shortcuts
-              if (
-                event.key === "PrintScreen" ||
-                (event.ctrlKey && event.key === "p") ||
-                (event.metaKey && event.key === "p")
-              ) {
-                event.preventDefault();
-                alert("Screenshots are disabled!");
-              }
-            });
+      document.addEventListener("DOMContentLoaded", function () {
+        document.body.classList.add("dark");
+        const messageInput = document.getElementById("messageInput");
+        messageInput.addEventListener("keypress", function (event) {
+          if (event.key === "Enter") {
+            event.preventDefault();
+            sendMessage();
+          }
+        });
+      });
 
-            // Detect when user tries to switch apps (Android/iOS)
-            document.addEventListener("visibilitychange", function () {
-              if (document.hidden) {
-                document.body.style.display = "none"; // Hide content
-                setTimeout(() => {
-                  document.body.style.display = "block";
-                }, 1000); // Restore after 1s
-              }
-            });
+      document.addEventListener("keydown", function (event) {
+        // Block screenshot shortcuts
+        if (
+          event.key === "PrintScreen" ||
+          (event.ctrlKey && event.key === "p") ||
+          (event.metaKey && event.key === "p")
+        ) {
+          event.preventDefault();
+          alert("Screenshots are disabled!");
+        }
+      });
 
+      // Detect when user tries to switch apps (Android/iOS)
+      document.addEventListener("visibilitychange", function () {
+        if (document.hidden) {
+          document.body.style.display = "none"; // Hide content
+          setTimeout(() => {
+            document.body.style.display = "block";
+          }, 1000); // Restore after 1s
+        }
+      });
 
+      // Prevent copying content
+      document.addEventListener("copy", function (event) {
+        event.preventDefault();
+        alert("Copying is disabled!");
+      });
 
-            // Prevent copying content
-            document.addEventListener("copy", function (event) {
-              event.preventDefault();
-              alert("Copying is disabled!");
-            });
+      // For Android & iOS (blocks screen recording)
 
-            // For Android & iOS (blocks screen recording)
+      (function () {
+        // Prevent right-click (Context Menu)
+        document.addEventListener("contextmenu", function (event) {
+          event.preventDefault();
+        });
 
+        // Prevent F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C, Ctrl+U
+        document.addEventListener("keydown", function (event) {
+          if (
+            event.key === "F12" ||
+            (event.ctrlKey && event.shiftKey && event.key === "I") ||
+            (event.ctrlKey && event.shiftKey && event.key === "J") ||
+            (event.ctrlKey && event.shiftKey && event.key === "C") ||
+            (event.ctrlKey && event.key === "U")
+          ) {
+            event.preventDefault();
+          }
+        });
+      })();
+      function togglePassword() {
+        const passwordField = document.getElementById("password");
+        const eyeIcon = document.getElementById("eyeIcon");
+        if (passwordField.type === "password") {
+          passwordField.type = "text";
+          eyeIcon.textContent = "🙈"; // Closed eye icon
+        } else {
+          passwordField.type = "password";
+          eyeIcon.textContent = "👁️"; // Open eye icon
+        }
+      }
 
-            (function () {
-              // Prevent right-click (Context Menu)
-              document.addEventListener("contextmenu", function (event) {
-                event.preventDefault();
-              });
-
-              // Prevent F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C, Ctrl+U
-              document.addEventListener("keydown", function (event) {
-                if (
-                  event.key === "F12" ||
-                  (event.ctrlKey && event.shiftKey && event.key === "I") ||
-                  (event.ctrlKey && event.shiftKey && event.key === "J") ||
-                  (event.ctrlKey && event.shiftKey && event.key === "C") ||
-                  (event.ctrlKey && event.key === "U")
-                ) {
-                  event.preventDefault();
-                }
-              });
-
-
-            })();
-             function togglePassword() {
-              const passwordField = document.getElementById("password");
-              const eyeIcon = document.getElementById("eyeIcon");
-              if (passwordField.type === "password") {
-                passwordField.type = "text";
-                eyeIcon.textContent = "🙈"; // Closed eye icon
-              } else {
-                passwordField.type = "password";
-                eyeIcon.textContent = "👁️"; // Open eye icon
-              }
-            }
-
-            document.addEventListener("DOMContentLoaded", function () {
+      document.addEventListener("DOMContentLoaded", function () {
         const inputArea = document.querySelector(".input-area");
         const messageInput = document.getElementById("messageInput");
 
         let originalBottom = inputArea.style.bottom; // Store default bottom position
 
         function adjustForKeyboard() {
-          if (window.innerWidth < 768) { // Mobile only
+          if (window.innerWidth < 768) {
+            // Mobile only
             const screenHeight = window.innerHeight;
             window.addEventListener("resize", function () {
               if (window.innerHeight < screenHeight) {
                 inputArea.style.position = "fixed";
                 inputArea.style.bottom = "10px";
-               inputArea.style.background = "#2d3748ba";
+                inputArea.style.background = "#2d3748ba";
                 inputArea.style.width = "90%";
                 inputArea.style.zIndex = "9999";
               } else {
                 inputArea.style.position = "relative";
                 inputArea.style.bottom = originalBottom;
                 inputArea.style.transform = "none";
-               inputArea.style.background = "transparent";
+                inputArea.style.background = "transparent";
 
                 inputArea.style.width = "100%";
               }
